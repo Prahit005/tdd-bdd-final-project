@@ -104,3 +104,68 @@ class TestProductModel(unittest.TestCase):
     #
     # ADD YOUR TEST CASES HERE
     #
+    def test_read_product(self):
+        """It should Read a Product from the database"""
+        product = ProductFactory()
+        product.create()
+
+        self.assertIsNotNone(product.id)
+
+        found = Product.find(product.id)
+        self.assertIsNotNone(found)
+        self.assertEqual(found.id, product.id)
+        self.assertEqual(found.name, product.name)
+
+    def test_update_product(self):
+        """It should Update a Product"""
+        product = ProductFactory()
+        product.create()
+
+        product.description = "Updated description"
+        product.update()
+
+        updated = Product.find(product.id)
+        self.assertEqual(updated.description, "Updated description")
+
+    def test_delete_product(self):
+        """It should Delete a Product"""
+        product = ProductFactory()
+        product.create()
+
+        product_id = product.id
+        self.assertIsNotNone(Product.find(product_id))
+
+        product.delete()
+        self.assertIsNone(Product.find(product_id))
+
+    def test_list_all_products(self):
+        """It should List all Products in the database"""
+        self.assertEqual(len(Product.all()), 0)
+
+        for _ in range(5):
+            ProductFactory().create()
+
+        self.assertEqual(len(Product.all()), 5)
+
+    def test_find_by_name(self):
+        """It should Find Products by Name"""
+        ProductFactory(name="Hat").create()
+        ProductFactory(name="Hat").create()
+        ProductFactory(name="Shirt").create()
+
+        results = Product.find_by_name("Hat").all()
+        self.assertEqual(len(results), 2)
+        for product in results:
+            self.assertEqual(product.name, "Hat")
+
+    def test_find_by_availability(self):
+        """It should Find Products by Availability"""
+        ProductFactory(available=True).create()
+        ProductFactory(available=False).create()
+        ProductFactory(available=True).create()
+
+        results = Product.find_by_availability(True).all()
+        self.assertEqual(len(results), 2)
+        for product in results:
+                self.assertTrue(product.available)
+

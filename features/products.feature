@@ -38,3 +38,77 @@ Scenario: Create a Product
     And I should see "True" in the "Available" dropdown
     And I should see "Tools" in the "Category" dropdown
     And I should see "34.95" in the "Price" field
+
+Scenario: Read a Product
+    When I set the "Name" to "Drill"
+    And I set the "Description" to "Power drill"
+    And I select "True" in the "Available" dropdown
+    And I select "Tools" in the "Category" dropdown
+    And I set the "Price" to "79.99"
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I copy the "Id" field
+    And I press the "Clear" button
+    When I paste the "Id" field
+    And I press the "Retrieve" button
+    Then I should see the message "Success"
+    And I should see "Drill" in the "Name" field
+    And I should see "Power drill" in the "Description" field
+
+Scenario: Update a Product
+    When I set the "Name" to "Screwdriver"
+    And I set the "Description" to "Flat-head"
+    And I select "True" in the "Available" dropdown
+    And I select "Tools" in the "Category" dropdown
+    And I set the "Price" to "15.00"
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I copy the "Id" field
+    And I press the "Clear" button
+    When I paste the "Id" field
+    And I press the "Retrieve" button
+    Then I should see the message "Success"
+    When I change "Description" to "Phillips-head"
+    When I press the "Update" button
+    Then I should see the message "Success"
+    And I should see "Phillips-head" in the "Description" field
+
+Scenario: Delete a Product
+    When I set the "Name" to "Wrench"
+    And I set the "Description" to "Pipe wrench"
+    And I select "True" in the "Available" dropdown
+    And I select "Tools" in the "Category" dropdown
+    And I set the "Price" to "23.50"
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I copy the "Id" field
+    And I press the "Clear" button
+    When I paste the "Id" field
+    And I press the "Delete" button
+    Then the "Name" field should be empty
+
+Scenario: Search Products by Name
+    When I set the "Name" to "UniqueName"
+    And I set the "Description" to "Special"
+    And I select "True" in the "Available" dropdown
+    And I select "Tools" in the "Category" dropdown
+    And I set the "Price" to "99.99"
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I set the "Name" to "UniqueName"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "UniqueName" in the "Name" field
+
+Scenario: Search Products by Category
+    When I set the "Name" to "Blender"
+    And I set the "Description" to "Kitchen appliance"
+    And I select "True" in the "Available" dropdown
+    And I select "Housewares" in the "Category" dropdown
+    And I set the "Price" to "45.00"
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I select "Housewares" in the "Category" dropdown
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "Blender" in the "Name" field
